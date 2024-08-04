@@ -8,6 +8,12 @@ Output "Hello World!"
 $ npm install -g @tettekete/hello-world
 ```
 
+# Usage
+
+```sh
+$ hello-world
+```
+
 # Uninstall
 
 
