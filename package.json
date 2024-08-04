@@ -5,13 +5,13 @@
   "main": "dist/index.js",
   "scripts": {
     "build": "rm -rf ./dist/* && tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "cp README.npm.md ReadMe.md",
+    "postpublish": "git checkout ReadMe.md"
   },
   "files": [
-    "dist",
-    "README.npm.md"
+    "dist"
   ],
-  "readme": "README.npm.md",
   "bin": {
     "hello-world": "dist/index.js"
   },
