@@ -1,6 +1,6 @@
 {
   "name": "@tettekete/hello-world",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "test of my first npm",
   "main": "dist/index.js",
   "scripts": {
