@@ -1,0 +1,13 @@
+volumes:
+  dist-vol:
+services:
+  app:
+    image: test/hello-world
+    build: .
+    tty: true
+    volumes:
+      - .:/app
+      - dist-vol:/app/dist
+    command: ["hello-world"]
+    # entrypoint: ["tail","-f","/dev/null"]
+  
