@@ -4,7 +4,14 @@
   "description": "test of my first npm",
   "main": "dist/index.js",
   "scripts": {
+    "build": "rm -rf ./dist/* && tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "files": [
+    "dist"
+  ],
+  "bin": {
+    "hello-world": "dist/index.js"
   },
   "keywords": [
     "experiment"
