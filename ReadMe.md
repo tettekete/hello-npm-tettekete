@@ -1,4 +1,5 @@
 # npm への公開テスト用リポジトリ
+![npm](https://img.shields.io/npm/v/@tettekete/hello-world)
 
 ## モジュールインストール & ビルド
 
