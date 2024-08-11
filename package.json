@@ -6,8 +6,9 @@
   "scripts": {
     "build": "rm -rf ./dist/* && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepublishOnly": "cp README.npm.md ReadMe.md",
-    "postpublish": "git checkout ReadMe.md"
+    "prepublishOnly": "npm run build",
+    "prepack": "mv README.npm.md ReadMe.md",
+    "postpack": "git checkout ReadMe.md README.npm.md"
   },
   "files": [
     "dist"
