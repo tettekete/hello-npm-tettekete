@@ -5,6 +5,10 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Specify the tag (optional)'
+        required: false
 
 jobs:
   create-release:
@@ -13,12 +17,46 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
+      with:
+        # fetch-depth: 0  # タグを取得するためにすべての履歴を取得
+        fetch-tags: true
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
-        
+    
+    - name: Get the latest tag
+      id: get_latest_tag
+      run: |
+        if [ -n "${{ github.event.inputs.tag }}" ]; then
+          echo "TAG_NAME=${{ github.event.inputs.tag }}" >> $GITHUB_ENV
+        else
+          TAG=$(git describe --tags --abbrev=0)
+          echo "TAG_NAME=$TAG" >> $GITHUB_ENV
+        fi
+      shell: bash
+    
+    - name: "DEBUG - env.TAG_NAME"
+      run: |
+        echo "env.TAG_NAME: ${{ env.TAG_NAME }}"
+  
+    - name: Checkout specific tag
+      run: |
+          git checkout ${{ env.TAG_NAME }}
+      shell: bash
+    
+    - name: Get commit message for the tag
+      id: get_commit_message
+      run: |
+        # タグに紐づくコミットメッセージを取得
+        COMMIT_MESSAGE=$(git log -1 --format=%B)
+        echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
+
+    - name: "DEBUG - env.COMMIT_MESSAGE"
+      run: |
+        echo "env.TAG_NAME: ${{ env.COMMIT_MESSAGE }}"
+
     - name: Install dependencies
       run: npm install
 
@@ -28,23 +66,28 @@ jobs:
     - name: Get generated tarball name
       id: get_tarball_name
       run: echo "TARBALL_NAME=$(ls *.tgz)" >> $GITHUB_ENV
+    
+    - name: "DEBUG - env.TARBALL_NAME"
+      run: |
+        echo "env.TAG_NAME: ${{ env.TARBALL_NAME }}"
 
-    - name: Create GitHub Release
-      id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ github.ref }}
-        draft: false
-        prerelease: false
+    # - name: Create GitHub Release
+    #   id: create_release
+    #   uses: actions/create-release@v1
+    #   env:
+    #     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    #   with:
+    #     tag_name: ${{ env.TAG_NAME }}
+    #     release_name: Release ${{ env.TAG_NAME }}
+    #     body: ${{ env.COMMIT_MESSAGE }}
+    #     draft: false
+    #     prerelease: false
 
-    - name: Upload npm package to release
-      uses: actions/upload-release-asset@v1
-      with:
-        upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./*.tgz  # npm packで生成されたパッケージ
-        asset_name: ${{ env.TARBALL_NAME }}
-        asset_content_type: application/gzip
+    # - name: Upload npm package to release
+    #   uses: actions/upload-release-asset@v1
+    #   with:
+    #     upload_url: ${{ steps.create_release.outputs.upload_url }}
+    #     asset_path: ./*.tgz  # npm packで生成されたパッケージ
+    #     asset_name: ${{ env.TARBALL_NAME }}
+    #     asset_content_type: application/gzip
     
