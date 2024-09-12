@@ -10,6 +10,11 @@ on:
         description: 'Specify the tag (optional)'
         required: false
 
+# GITHUB_TOKEN の権限調整 
+permissions:
+  contents: write  # リリース作成に必要
+  packages: write  # npm packの結果をリリースにアップロードするために必要
+
 jobs:
   create-release:
     runs-on: ubuntu-latest
