@@ -18,8 +18,8 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
-        # fetch-depth: 0  # タグを取得するためにすべての履歴を取得
-        fetch-tags: true
+        fetch-depth: 0  # タグを取得するためにすべての履歴を取得
+        # fetch-tags: true
 
     - name: Setup Node.js
       uses: actions/setup-node@v4
