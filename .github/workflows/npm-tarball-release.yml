@@ -53,42 +53,51 @@ jobs:
         -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         https://api.github.com/repos/${{ github.repository }}/releases/tags/${{ env.TAG_NAME }})
         if [ "$RELEASE_RESPONSE" = "200" ]; then
-          echo "Release already exists."
-          exit 0
+          echo "release_exists=true" >> $GITHUB_ENV
+        else
+          echo "release_exists=false" >> $GITHUB_ENV
         fi
       shell: bash
   
     - name: Checkout specific tag
+      if: env.release_exists == 'false'  # Run only if release does not exist
       run: |
           git checkout ${{ env.TAG_NAME }}
       shell: bash
     
     - name: Get commit message for the tag
       id: get_commit_message
+      if: env.release_exists == 'false'  # Run only if release does not exist
       run: |
         # タグに紐づくコミットメッセージを取得
         COMMIT_MESSAGE=$(git log -1 --format=%B)
         echo "COMMIT_MESSAGE=$COMMIT_MESSAGE" >> $GITHUB_ENV
 
     - name: "DEBUG - env.COMMIT_MESSAGE"
+      if: env.release_exists == 'false'  # Run only if release does not exist
       run: |
         echo "env.TAG_NAME: ${{ env.COMMIT_MESSAGE }}"
 
     - name: Install dependencies
+      if: env.release_exists == 'false'  # Run only if release does not exist
       run: npm install
 
     - name: Create npm package
+      if: env.release_exists == 'false'  # Run only if release does not exist
       run: npm pack
 
     - name: Get generated tarball name
       id: get_tarball_name
+      if: env.release_exists == 'false'  # Run only if release does not exist
       run: echo "TARBALL_NAME=$(ls *.tgz)" >> $GITHUB_ENV
     
     - name: "DEBUG - env.TARBALL_NAME"
+      if: env.release_exists == 'false'  # Run only if release does not exist
       run: |
         echo "env.TAG_NAME: ${{ env.TARBALL_NAME }}"
 
     - name: Create GitHub Release
+      if: env.release_exists == 'false'  # Run only if release does not exist
       id: create_release
       uses: actions/create-release@v1
       env:
@@ -101,6 +110,7 @@ jobs:
         prerelease: false
 
     - name: Upload npm package to release
+      if: env.release_exists == 'false'  # Run only if release does not exist
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
