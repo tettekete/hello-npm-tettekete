@@ -7,7 +7,7 @@
     "build": "rm -rf ./dist/* && tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepublishOnly": "npm run build",
-    "prepack": "ln -sF README.npm.md ReadMe.md",
+    "prepack": "mv README.npm.md ReadMe.md",
     "postpack": "git checkout ReadMe.md README.npm.md"
   },
   "files": [
