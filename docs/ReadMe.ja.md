@@ -1,15 +1,14 @@
-# A repository used to test publishing to npm
-
+# npm への公開テスト用リポジトリ
 ![npm](https://img.shields.io/npm/v/@tettekete/hello-world)
 
-## Install & Build
+## モジュールインストール & ビルド
 
 ```sh
 $ npm install
 $ npm run build
 ```
 
-## Test
+## テスト
 
 ```sh
 $ npm link
@@ -20,7 +19,7 @@ $ hello-world
 zsh: command not found: hello-world
 ```
 
-## Build & Test with Docker
+## ビルド & テスト with Docker
 
 ```sh
 $ docker compose up --build
