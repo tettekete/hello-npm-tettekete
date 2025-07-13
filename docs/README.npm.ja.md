@@ -1,3 +1,6 @@
+
+<p align="center"><a href="https://www.npmjs.com/package/@tettekete/hello-world">English</a> / 日本語</p>
+
 # 説明
 
 標準出力に "Hello World!" を出力します。

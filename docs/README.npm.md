@@ -1,3 +1,6 @@
+
+<p align="center">English / <a href="https://tettekete.github.io/hello-npm-tettekete/README.npm.ja.html">日本語</a></p>
+
 # Description
 
 Output "Hello World!"
